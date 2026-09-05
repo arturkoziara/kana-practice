@@ -12,7 +12,6 @@
 <body>
 <a id="top"></a><script src="js/djtkana.js"></script>
 
-<hr class="brush">
 <div class="theme-toggle-wrap">
 <input type="checkbox" id="theme-switch" class="theme-switch-input">
 <label for="theme-switch" class="theme-switch-label" title="Toggle night/day theme">
@@ -21,7 +20,6 @@
 <span class="theme-switch-ball"></span>
 </label>
 </div>
-<div class="modechange2"><a href="https://djtguide.neocities.org/kana/index.html">original</a></div>
 <div class="bodymargin">
 <h1>kana</h1>
 <hr class="dotted">
@@ -42,9 +40,18 @@
 		<li id="tool_mnemonic" style="visibility: hidden;"><a>Mnemonic</a></li>
 		<li id="tool_stats"><a>Full stats</a></li>
 	</ul>
+	<label class="autoplay-toggle" for="mnemonic_auto">
+		<input type="checkbox" id="mnemonic_auto" />
+		Show mnemonics while reviewing
+	</label>
 	<label class="autoplay-toggle" for="autoplay_sound">
 		<input type="checkbox" id="autoplay_sound" />
 		Auto-play sound on show
+	</label>
+	<label class="autoplay-toggle autoplay-delay-row" for="autoplay_delay">
+		Delay before playing
+		<input type="range" id="autoplay_delay" min="0.01" max="2" step="0.01" value="0" />
+		<span id="autoplay_delay_value">0.00s</span>
 	</label>
 	<div id="count"></div>
 	<div id="liveStats" class="live-stats"></div>
@@ -459,28 +466,6 @@
 		<td><span class="font_example"><img class="inverse" src="kana/fonts/KOI-WIN/ぎ.png" /> </span></td>
 	</tr>
 </table>
-<p>(The last font above is difficult and you may want to skip it as a beginner.)</p>
-
-<h4>Explanation</h4>
-<div>
-<p>Grind a row of kana until you stop making mistakes, then add another row. Cross reference the <code>kana audio chart</code> link to make sure you are pronouncing the kana correctly. If you wish to write, the <code>Stroke order</code> link will show you the proper form. You can save a few keystrokes on DJT Kana and your <span class="help" title="Input Method Editor: program that converts romaji keyboard input to kana">IME</span> with the shortcuts below.</p>
-
-<img src="kana/shortcuts.png"  height="326" width="277">
-
-<p>The two dots (<a class="underscore" href="https://en.wikipedia.org/wiki/Dakuten">dakuten</a>) next to certain kana indicate that the consonant is "muddied". For example, か (ka) becomes が (ga). The consonants transform as follows:
-<ul>
-	<li>k -> g</li>
-	<li>t -> d</li>
-	<li>h/f -> b</li>
-	<li>s/ts -> z</li>
-	<li>sh/ch -> j</li>
-</ul>
-
-<p>A few kana add a circle to indicate a "p" transformation. For example, ほ (ho) becomes ぽ (po).</p>
-
-<p>The smaller kana ゅ, ょ, and ゃ are used to combine kana sounds. For example, in <span style="white-space:nowrap">ぎゃ</span> the consonant of ぎ (gi) combines with the sound from や (ya): gya. The small っ (distinct from つ/tsu) is not itself pronounced, but lengthens the consonant that follows, as in <a class="underscore" href="https://upload.wikimedia.org/wikipedia/commons/d/db/Ja-nippon%28%E6%97%A5%E6%9C%AC%29.ogg" />にっぽん</a> (nippon); the effect of holding your mouth in the consonant's position resembles a small pause.</p>
-</div>
-
 
 </div>
 </div>

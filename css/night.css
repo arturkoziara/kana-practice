@@ -857,6 +857,22 @@ vertical-align:middle;
 margin-right:0.4em;
 }
 
+.autoplay-delay-row {
+cursor:default;
+}
+
+.autoplay-delay-row input[type="range"] {
+vertical-align:middle;
+margin:0 0.6em;
+width:10em;
+}
+
+#autoplay_delay_value {
+display:inline-block;
+min-width:3.5em;
+font-variant-numeric:tabular-nums;
+}
+
 .kanacheck {
 display:inline;
 }

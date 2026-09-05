@@ -132,13 +132,6 @@ var replacements = {
 	'ju': ['dyu']
 };
 
-var dakuten_map = {
-	'hg': ['hk', 'dakuten'], 'hz': ['hs', 'dakuten'], 'hd': ['ht', 'dakuten'],
-	'hb': ['hh', 'dakuten'], 'hp': ['hh', 'handakuten'],
-	'kg': ['kk', 'dakuten'], 'kz': ['ks', 'dakuten'], 'kd': ['kt', 'dakuten'],
-	'kb': ['kh', 'dakuten'], 'kp': ['kh', 'handakuten']
-};
-
 function find_row(kana_char) {
 	for (var row in kana) {
 		if (kana[row].hasOwnProperty(kana_char)) {
@@ -148,29 +141,180 @@ function find_row(kana_char) {
 	return null;
 }
 
+var mnemonics = {
+	'あ': 'Looks like a curly antenna picking up a signal — "AH", reception!',
+	'い': 'Looks like two eyelashes blinking side by side — "EE", a matching pair.',
+	'う': 'Looks like a swan’s head curling down — "OOH", so graceful.',
+	'え': 'Looks like a person taking an exaggerated bow, arm out — "EH?"',
+	'お': 'Looks like a spiral ribbon curling up — tie a bow and say "OH".',
+	'か': 'Looks like a key with a loop — turn it and go "KAH".',
+	'き': 'Looks like a kite string full of knots — "KEE"-p it flying.',
+	'く': 'Looks like a boomerang bent at an angle — throw it, it comes back "KOO".',
+	'け': 'Looks like a comb with one long tooth — comb through and say "KEH".',
+	'こ': 'Looks like two hooks stacked like a coat hanger — "KOH"-t hanger.',
+	'さ': 'Looks like a samurai’s topknot with a slash — "SAH"-murai.',
+	'し': 'Looks like a fishhook dangling down — cast it and reel in a "SHE".',
+	'す': 'Looks like a curled garden hose — "SOO"-per soaker.',
+	'せ': 'Looks like a zigzag fence with a hook on the end — "SEH"-ttle down.',
+	'そ': 'Looks like a bolt of lightning zig-zagging down — "SO" bright!',
+	'た': 'Looks like a dancer mid "ta-da!" pose, arms out — "TAH-DAH".',
+	'ち': 'Looks like a curled hook with a little flick — "CHEE"-rs!',
+	'つ': 'Looks like a cresting wave about to crash — "TSU"-nami.',
+	'て': 'Looks like a hand reaching out — "TEH", take my hand.',
+	'と': 'Looks like a door hinge swinging open — "TOH", come on in.',
+	'な': 'Looks like a knot tied in rope with a loose loop — "NAH"-t so easy to untie.',
+	'に': 'Looks like two bent knees — kneel down and say "NEE".',
+	'ぬ': 'Looks like a tangled bowl of noodles — slurp some "NOO"-dles.',
+	'ね': 'Looks like a cat curling its tail as it naps — "NEH", nice nap.',
+	'の': 'Looks like a single spiral loop — "NO" way, just one curl!',
+	'は': 'Looks like a person laughing "HA HA" while leaning on a cane.',
+	'ひ': 'Looks like a big smiling mouth — "HEE HEE".',
+	'ふ': 'Looks like Mount Fuji with two little clouds on top — "FU"-ji-san.',
+	'へ': 'Looks like a tiny mountain peak, or a shrugging eyebrow — "HEH?"',
+	'ほ': 'Looks like a hoe with extra prongs for gardening — "HOH", let’s dig.',
+	'ま': 'Looks like a mother’s apron knot — "MAH"-ma, tying her apron.',
+	'み': 'Looks like a curled ribbon — "MEE", what a pretty bow.',
+	'む': 'Looks like a cow’s face with horns — "MOO".',
+	'め': 'Looks like a closed eye — bat your eyelash and say "MEH".',
+	'も': 'Looks like a mole popping out of its hole — "MOH"-le!',
+	'や': 'Looks like a slingshot pulled back and ready — "YAH"!',
+	'ゆ': 'Looks like a steaming hot-spring symbol — soak in and sigh "YOO".',
+	'よ': 'Looks like someone waving casually — "YO", what’s up?',
+	'ら': 'Looks like a ladle scooping up soup — "RAH"-men time.',
+	'り': 'Looks like two friends standing side by side — a "REE"-union.',
+	'る': 'Looks like a rollercoaster loop-de-loop — "ROO"-ller coaster.',
+	'れ': 'Looks like someone bowing with a long ponytail flick — "REH"-spect.',
+	'ろ': 'Looks like a robot’s square head with a loop antenna — "ROH"-bot.',
+	'わ': 'Looks like a swan’s neck curling into a loop — graceful "WAH".',
+	'を': 'Looks like a fisherman with his hook and hat — say "OH" when this rare particle shows up.',
+	'ん': 'Looks like a single fishhook — the last sound, just "N", hook, line, and done.',
+
+	'が': 'Looks like a key straining with extra weight on it — turn it hard and go "GAH".',
+	'ぎ': 'Looks like a kite string with two extra knots weighing it down — tug hard, "GEE".',
+	'ぐ': 'Looks like a heavier boomerang — throw it and it lands with a "GOO"-mph.',
+	'げ': 'Looks like a comb with two broken teeth — ouch, "GEH".',
+	'ご': 'Looks like two hooks with sparks jumping between them — race and go "GO"!',
+	'ざ': 'Looks like a samurai’s topknot buzzing with static — "ZAH"-p!',
+	'じ': 'Looks like a fishhook with a fly buzzing around it — "JI"-tterbug.',
+	'ず': 'Looks like a hose spraying under extra pressure, sputtering — "ZOO"-m.',
+	'ぜ': 'Looks like a fence buzzing with electricity — "ZEH"-ro volts left.',
+	'ぞ': 'Looks like a lightning bolt that’s now buzzing with static — "ZOH"-mbie shuffle.',
+	'だ': 'Looks like a dancer’s "ta-da" pose with jazz hands shaking — "DAH", showtime.',
+	'ぢ': 'Looks like a curled hook vibrating — a rare buzzing twin of じ, still "JI".',
+	'づ': 'Looks like a wave rumbling with an underwater hum — a rare buzzing twin of ず, still "ZU".',
+	'で': 'Looks like a hand reaching out and bumping into something — "DEH", watch out!',
+	'ど': 'Looks like a door slamming shut hard — "DOH"!',
+	'ば': 'Looks like someone laughing so hard they’re shaking — "BAH HAH HAH".',
+	'び': 'Looks like a big buzzing smile — bees humming "BEE".',
+	'ぶ': 'Looks like Mount Fuji rumbling right before it erupts — "BOO"-m.',
+	'べ': 'Looks like a mountain peak echoing with a sonic boom — "BEH".',
+	'ぼ': 'Looks like a hoe striking solid rock — "BOH", clang.',
+	'ぱ': 'Looks like someone laughing while popping bubble wrap — "PA", pop!',
+	'ぴ': 'Looks like a smiling face popping a party popper — "PI"-ñata!',
+	'ぷ': 'Looks like Mount Fuji puffing out a tiny smoke ring — "PU"-ff.',
+	'ぺ': 'Looks like a mountain peak popping like a cork — "PEH"-pper spray.',
+	'ぽ': 'Looks like a hoe popping a little potato out of the ground — "POH"-tato.',
+
+	'ア': 'Looks like a satellite dish tilted to catch a signal — "AH", reception!',
+	'イ': 'Looks like a stick figure mid-stride — "EE", quick step.',
+	'ウ': 'Looks like a party hat with a dot on top — "OOH", celebrate!',
+	'エ': 'Looks like a steel I-beam on a construction site — "EH", heavy lifting.',
+	'オ': 'Looks like a scarecrow with one arm raised — "OH", hello there!',
+	'カ': 'Looks like a sharp sickle blade — swing it, "KAH".',
+	'キ': 'Looks like an actual house key with teeth — "KEY", open up!',
+	'ク': 'Looks like a claw hooking onto something — "KOO", gotcha.',
+	'ケ': 'Looks like a little flag flapping on a pole — "KEH", windy day.',
+	'コ': 'Looks like an open box lid — "KOH", peek inside.',
+	'サ': 'Looks like a sailboat mast with a flapping sail — "SAH", set sail.',
+	'シ': 'Looks like a cat’s three whiskers — "SHE" has whiskers.',
+	'ス': 'Looks like someone sliding down a slide — "SOO", wheee.',
+	'セ': 'Looks like a fold-out chair — sit down and say "SEH".',
+	'ソ': 'Looks like two raindrops falling — "SO" wet outside.',
+	'タ': 'Looks like a bird’s talon gripping a branch — "TAH", perched.',
+	'チ': 'Looks like a fishing pole with a hooked line and a cross-brace — "CHEE", catch!',
+	'ツ': 'Looks like three cresting waves — "TSU"-nami warning.',
+	'テ': 'Looks like a TV antenna on a rooftop — "TEH"-levision.',
+	'ト': 'Looks like a signpost pointing two ways — "TOH", which way?',
+	'ナ': 'Looks like a small knife with a crossguard — "NAH", careful with that.',
+	'ニ': 'Looks like two horizontal stair steps — climb up and say "NEE".',
+	'ヌ': 'Looks like a strand of tangled noodles — "NOO"-dle.',
+	'ネ': 'Looks like a shrine gate (torii) — pray and say "NEH".',
+	'ノ': 'Looks like a single slash mark — "NO", crossed right out.',
+	'ハ': 'Looks like two legs spread wide, laughing — "HA HA".',
+	'ヒ': 'Looks like a fishhook with a little flag — "HEE", caught one!',
+	'フ': 'Looks like a shark fin slicing through water — "FOO", watch out!',
+	'ヘ': 'Looks like a tiny mountain peak, or a shrugging eyebrow — "HEH?"',
+	'ホ': 'Looks like a lighthouse with a crossbeam — "HOH", guiding light.',
+	'マ': 'Looks like a scarf draped over a hook — "MAH"-ma’s scarf.',
+	'ミ': 'Looks like three whiskers in a row — "MEE", mimicking a cat.',
+	'ム': 'Looks like a cow’s face from the side, mid "MOO".',
+	'メ': 'Looks like eyelashes crossing shut — blink, "MEH".',
+	'モ': 'Looks like a bug’s antenna twitching — "MOH"-th.',
+	'ヤ': 'Looks like a slingshot’s Y-frame — pull back and "YAH"!',
+	'ユ': 'Looks like a teacup handle, steam rising off the tea — sip and sigh "YOO".',
+	'ヨ': 'Looks like a stack of three shelves — wave "YO" from the top one.',
+	'ラ': 'Looks like a small flag on a rooftop — wave and shout "RAH"!',
+	'リ': 'Looks like two chopsticks standing in a rice bowl — "REE", dinner’s ready.',
+	'ル': 'Looks like a shoelace looped into a bow — tie it, "ROO".',
+	'レ': 'Looks like a checkmark on a to-do list — "REH", done!',
+	'ロ': 'Looks like a perfect square window — "ROH"-bot’s eye.',
+	'ワ': 'Looks like a swan bending its neck — graceful "WAH".',
+	'ヲ': 'Looks like a fancy fishhook with a flourish, rarely used — still just "OH".',
+	'ン': 'Looks like a single comma-shaped hook — the final sound, just "N".',
+
+	'ガ': 'Looks like a sickle blade throwing off sparks as it swings — "GAH"!',
+	'ギ': 'Looks like a key jammed in a rusty lock, straining — "GEE", stuck.',
+	'グ': 'Looks like a claw gripping something heavy — "GOO", heave!',
+	'ゲ': 'Looks like a flag whipping violently in a storm — "GEH", windy.',
+	'ゴ': 'Looks like an open box buzzing with bees inside — "GO", run!',
+	'ザ': 'Looks like a ZAppy lightning bolt hitting a wall.',
+	'ジ': 'Looks like a sideways face laughing so hard that JImmy’s tears are flying out.',
+	'ズ': 'Looks like an acrobat ZUooming down a zip line.',
+	'ゼ': 'Looks like a ZEn garden gate with a couple of stepping stones.',
+	'ゾ': 'Looks like the zig-zag patterns on a ZOo animal, like a zebra.',
+	'ダ': 'Looks like a bird’s talon slamming down onto prey — "DAH", pounce!',
+	'ヂ': 'Looks like a fishing pole buzzing on the line — a rare twin of ジ, still "JI".',
+	'ヅ': 'Looks like waves crashing with a low rumble — a rare twin of ズ, still "ZU".',
+	'デ': 'Looks like a TV antenna picking up static — "DEH", bad signal.',
+	'ド': 'Looks like a signpost struck by lightning — "DOH"!',
+	'バ': 'Looks like two legs stomping down hard — "BAH", thump.',
+	'ビ': 'Looks like a fishhook buzzing with a caught bee — "BEE".',
+	'ブ': 'Looks like a shark fin crashing through a wave — "BOO", splash.',
+	'ベ': 'Looks like a mountain peak rumbling right before it booms — "BEH".',
+	'ボ': 'Looks like a lighthouse beam booming out a warning — "BOH".',
+	'パ': 'Looks like two legs kicking a balloon until it pops — "PA", pop!',
+	'ピ': 'Looks like a fishhook popping a little bubble — "PEE"-wee.',
+	'プ': 'Looks like a shark fin popping out of a bubble bath — "POO"-f.',
+	'ペ': 'Looks like a tiny peak popping like a cork — "PEH"-pper.',
+	'ポ': 'Looks like a lighthouse beam popping like a flashbulb — "POH"-p goes the light.'
+};
+
+var combo_base_map = {
+	'hdk': 'hk', 'hds': 'hs', 'hdc': 'ht', 'hdn': 'hn', 'hdh': 'hh', 'hdm': 'hm',
+	'hdr': 'hr', 'hdg': 'hg', 'hdj': 'hz', 'hdj2': 'hd', 'hdb': 'hb', 'hdp': 'hp',
+	'kdk': 'kk', 'kds': 'ks', 'kdc': 'kt', 'kdn': 'kn', 'kdh': 'kh', 'kdm': 'km',
+	'kdr': 'kr', 'kdg': 'kg', 'kdj': 'kz', 'kdj2': 'kd', 'kdb': 'kb', 'kdp': 'kp'
+};
+
 function get_mnemonic(kana_char) {
+	if (mnemonics[kana_char]) {
+		return mnemonics[kana_char];
+	}
+
 	var row = find_row(kana_char);
-	if (!row || !dakuten_map[row]) {
+	if (!row || !combo_base_map[row]) {
 		return null;
 	}
 
-	var base_row = dakuten_map[row][0];
-	var mark = dakuten_map[row][1];
-	var cur_keys = Object.keys(kana[row]);
-	var base_keys = Object.keys(kana[base_row]);
-	var idx = cur_keys.indexOf(kana_char);
-	if (idx == -1) {
-		return null;
-	}
-
-	var base_kana = base_keys[idx];
+	var base_row = combo_base_map[row];
+	var base_kana = Object.keys(kana[base_row])[1];
 	var base_reading = kana[base_row][base_kana];
+	var small = (row.charAt(0) == 'k') ? ['ヤ', 'ユ', 'ヨ'] : ['や', 'ゆ', 'よ'];
+	var idx = Object.keys(kana[row]).indexOf(kana_char);
 	var cur_reading_val = kana[row][kana_char];
 
-	if (mark == 'handakuten') {
-		return base_kana + ' (' + base_reading + ') + ゜ handakuten (small circle) → ' + kana_char + ' (' + cur_reading_val + '). The circle jumps straight to the P sound — it does not go through B.';
-	}
-	return base_kana + ' (' + base_reading + ') + ゛ dakuten (two strokes) → ' + kana_char + ' (' + cur_reading_val + '). The strokes voice the consonant.';
+	return base_kana + ' (' + base_reading + ') + small ' + small[idx] + ' → ' + kana_char + ' (' + cur_reading_val + '). ' +
+		(mnemonics[base_kana] || '') + ' Just glide it into "' + cur_reading_val + '".';
 }
 
 var active = [];
@@ -185,6 +329,32 @@ var total_correct = 0;
 
 var stats = {};
 var mistake_recorded = false;
+var autoplay_timer = null;
+var current_audio = null;
+
+function stop_audio() {
+	if (autoplay_timer) {
+		clearTimeout(autoplay_timer);
+		autoplay_timer = null;
+	}
+	if (current_audio) {
+		current_audio.pause();
+		current_audio = null;
+	}
+}
+
+function save_delay() {
+	localStorage.setItem('kana_autoplay_delay', document.getElementById('autoplay_delay').value);
+	document.getElementById('autoplay_delay_value').innerHTML = parseFloat(document.getElementById('autoplay_delay').value).toFixed(2) + 's';
+}
+
+function load_delay() {
+	var saved = localStorage.getItem('kana_autoplay_delay');
+	if (saved !== null) {
+		document.getElementById('autoplay_delay').value = saved;
+	}
+	document.getElementById('autoplay_delay_value').innerHTML = parseFloat(document.getElementById('autoplay_delay').value).toFixed(2) + 's';
+}
 
 function load_stats() {
 	try {
@@ -197,6 +367,151 @@ function load_stats() {
 
 function save_stats() {
 	localStorage.setItem('kana_stats', JSON.stringify(stats));
+}
+
+var daily = {};
+var last_review_time = null;
+
+function pad2(n) {
+	return (n < 10 ? '0' : '') + n;
+}
+
+function date_key(d) {
+	return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+}
+
+function load_daily() {
+	try {
+		var raw = localStorage.getItem('kana_daily');
+		daily = raw ? JSON.parse(raw) : {};
+	} catch (e) {
+		daily = {};
+	}
+}
+
+function save_daily() {
+	localStorage.setItem('kana_daily', JSON.stringify(daily));
+}
+
+function record_daily_review() {
+	var key = date_key(new Date());
+	if (!daily[key]) {
+		daily[key] = { count: 0, ms: 0 };
+	}
+	daily[key].count += 1;
+
+	var now = Date.now();
+	if (last_review_time && (now - last_review_time) < 60000) {
+		daily[key].ms += (now - last_review_time);
+	}
+	last_review_time = now;
+
+	save_daily();
+	render_streak_panel();
+}
+
+function render_streak_panel() {
+	var panel = document.getElementById('streakPanel');
+	if (!panel) {
+		return;
+	}
+
+	var today = new Date();
+	today.setHours(0, 0, 0, 0);
+	var today_str = date_key(today);
+	var today_data = daily[today_str] || { count: 0, ms: 0 };
+
+	var header;
+	if (today_data.count == 0) {
+		header = 'No reviews yet today.';
+	} else if (today_data.ms > 0) {
+		var minutes = today_data.ms / 60000;
+		var spc = (today_data.ms / 1000) / today_data.count;
+		header = 'Studied ' + today_data.count + ' card' + (today_data.count == 1 ? '' : 's') + ' in ' + minutes.toFixed(2) + ' minutes today (' + spc.toFixed(2) + 's/card)';
+	} else {
+		header = 'Studied ' + today_data.count + ' card' + (today_data.count == 1 ? '' : 's') + ' today';
+	}
+
+	var window_days = 91;
+	var start = new Date(today);
+	start.setDate(start.getDate() - (window_days - 1));
+	start.setDate(start.getDate() - start.getDay());
+
+	var cells = [];
+	var max_count = 1;
+	var cursor = new Date(start);
+	while (cursor <= today) {
+		var key = date_key(cursor);
+		var count = (daily[key] && daily[key].count) || 0;
+		if (count > max_count) {
+			max_count = count;
+		}
+		cells.push({ key: key, count: count, is_today: key == today_str });
+		cursor.setDate(cursor.getDate() + 1);
+	}
+
+	var grid_html = '';
+	for (i = 0; i < cells.length; i++) {
+		var c = cells[i];
+		var level = 0;
+		if (c.count > 0) {
+			var ratio = c.count / max_count;
+			level = ratio > 0.75 ? 4 : (ratio > 0.5 ? 3 : (ratio > 0.25 ? 2 : 1));
+		}
+		grid_html += '<div class="heat-cell heat-' + level + (c.is_today ? ' heat-today' : '') + '" title="' + c.key + ': ' + c.count + ' review' + (c.count == 1 ? '' : 's') + '"></div>';
+	}
+
+	var active_days = {};
+	for (var k in daily) {
+		if (daily[k].count > 0) {
+			active_days[k] = true;
+		}
+	}
+
+	var current_streak = 0;
+	var walk = new Date(today);
+	while (active_days[date_key(walk)]) {
+		current_streak += 1;
+		walk.setDate(walk.getDate() - 1);
+	}
+
+	var sorted_active = Object.keys(active_days).sort();
+	var longest_streak = 0;
+	var run = 0;
+	var prev_date = null;
+	for (i = 0; i < sorted_active.length; i++) {
+		var dt = new Date(sorted_active[i] + 'T00:00:00');
+		if (prev_date && Math.round((dt - prev_date) / 86400000) == 1) {
+			run += 1;
+		} else {
+			run = 1;
+		}
+		if (run > longest_streak) {
+			longest_streak = run;
+		}
+		prev_date = dt;
+	}
+
+	var active_in_window = 0;
+	var total_in_window = 0;
+	for (i = 0; i < cells.length; i++) {
+		if (cells[i].count > 0) {
+			active_in_window += 1;
+		}
+		total_in_window += cells[i].count;
+	}
+	var days_active_pct = Math.round((active_in_window / cells.length) * 100);
+	var daily_average = Math.round(total_in_window / cells.length);
+
+	panel.innerHTML =
+		'<div class="streak-header">' + header + '</div>' +
+		'<div class="heatmap">' + grid_html + '</div>' +
+		'<div class="streak-summary">' +
+			'<span><span class="streak-value">' + daily_average + '</span> avg cards/day</span>' +
+			'<span><span class="streak-value">' + days_active_pct + '%</span> days active</span>' +
+			'<span><span class="streak-value">' + longest_streak + '</span> longest streak</span>' +
+			'<span><span class="streak-value">' + current_streak + '</span> current streak</span>' +
+		'</div>';
 }
 
 function record_seen(k) {
@@ -446,7 +761,8 @@ function collect() {
 	}
 }
 
-function show_kana() {	
+function show_kana() {
+	stop_audio();
 	wrong = false;
 	document.getElementById('input_box').value = '';
 	
@@ -498,16 +814,26 @@ function show_kana() {
 	}
 
 	var mnemonic_box = document.getElementById('mnemonicBox');
-	mnemonic_box.style.display = 'none';
-	mnemonic_box.innerHTML = '';
-	if(get_mnemonic(cur_kana)) {
+	var mnemonic_text = get_mnemonic(cur_kana);
+	if(mnemonic_text) {
 		document.getElementById('tool_mnemonic').style.visibility = 'visible';
 	} else {
 		document.getElementById('tool_mnemonic').style.visibility = 'hidden';
 	}
+	if(mnemonic_text && document.getElementById('mnemonic_auto').checked) {
+		mnemonic_box.innerHTML = mnemonic_text;
+		mnemonic_box.style.display = 'block';
+	} else {
+		mnemonic_box.style.display = 'none';
+		mnemonic_box.innerHTML = '';
+	}
 
 	if(document.getElementById('autoplay_sound').checked) {
-		play_sound();
+		var delay_sec = parseFloat(document.getElementById('autoplay_delay').value) || 0;
+		autoplay_timer = setTimeout(function() {
+			autoplay_timer = null;
+			play_sound();
+		}, delay_sec * 1000);
 	}
 }
 
@@ -530,6 +856,7 @@ function grade_pass() {
 	total_answered += 1;
 	total_correct += 1;
 	update_level(cur_kana, true);
+	record_daily_review();
 	show_kana();
 }
 
@@ -540,6 +867,7 @@ function grade_fail() {
 		mistake_recorded = true;
 	}
 	update_level(cur_kana, false);
+	record_daily_review();
 	show_kana();
 }
 
@@ -588,6 +916,7 @@ function check_answer() {
 			total_correct += 1;
 		}
 		update_level(cur_kana, ! mistake_recorded);
+		record_daily_review();
 		show_kana();
 	}
 }
@@ -601,6 +930,7 @@ function force_next() {
 	}
 	total_answered += 1;
 	update_level(cur_kana, false);
+	record_daily_review();
 
 	show_kana();
 }
@@ -614,7 +944,11 @@ function hide_answer() {
 }
 
 function play_sound() {
+	if (current_audio) {
+		current_audio.pause();
+	}
 	var audio = new Audio('kana/audio/' + cur_reading + '.mp3');
+	current_audio = audio;
 	var result = audio.play();
 	if (result && result.catch) {
 		result.catch(function() {});
@@ -623,7 +957,11 @@ function play_sound() {
 }
 
 function play_other(file) {
+	if (current_audio) {
+		current_audio.pause();
+	}
 	var audio = new Audio('kana/audio/' + file + '.mp3');
+	current_audio = audio;
 	var result = audio.play();
 	if (result && result.catch) {
 		result.catch(function() {});
@@ -639,6 +977,9 @@ function stroke_order() {
 onload = function () {
 	load_settings();
 	load_stats();
+	load_delay();
+	load_daily();
+	render_streak_panel();
 
 	inputs = document.getElementsByTagName('input');
 	for (i = 0; i < inputs.length; i++) {
@@ -647,6 +988,8 @@ onload = function () {
 			inputs[i].onpropertychange = inputs[i].oninput;
 		}
 	}
+
+	document.getElementById('autoplay_delay').oninput = save_delay;
 
 	show_kana();
 
