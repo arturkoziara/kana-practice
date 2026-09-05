@@ -29,14 +29,23 @@
 <div id="kanabox">
 	<div id="answer">&nbsp;</div>
 	<div id="kana_con"><span id="kana"></span></div>
+	<div id="mnemonicBox" class="mnemonic-box"></div>
 	<div id="input"><input type="text" id="input_box" autofocus /></div>
+	<div class="grade-buttons">
+		<button type="button" id="btn_fail" class="grade-btn grade-fail">Fail <span class="key-hint">1</span></button>
+		<button type="button" id="btn_pass" class="grade-btn grade-pass">Pass <span class="key-hint">3</span></button>
+	</div>
 	<div id="message">&nbsp;</div>
 	<ul id="tools">
 		<li id="tool_sound"><a>Play sound</a></li>
 		<li id="tool_stroke" style="visibility: visible;"><a>Stroke order</a></li>
+		<li id="tool_mnemonic" style="visibility: hidden;"><a>Mnemonic</a></li>
 		<li id="tool_stats"><a>Full stats</a></li>
-		<!-- <li id="tool_mnemonic"><a>Mnemonic</a></li> -->
 	</ul>
+	<label class="autoplay-toggle" for="autoplay_sound">
+		<input type="checkbox" id="autoplay_sound" />
+		Auto-play sound on show
+	</label>
 	<div id="count"></div>
 	<div id="liveStats" class="live-stats"></div>
 </div>

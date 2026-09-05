@@ -132,6 +132,47 @@ var replacements = {
 	'ju': ['dyu']
 };
 
+var dakuten_map = {
+	'hg': ['hk', 'dakuten'], 'hz': ['hs', 'dakuten'], 'hd': ['ht', 'dakuten'],
+	'hb': ['hh', 'dakuten'], 'hp': ['hh', 'handakuten'],
+	'kg': ['kk', 'dakuten'], 'kz': ['ks', 'dakuten'], 'kd': ['kt', 'dakuten'],
+	'kb': ['kh', 'dakuten'], 'kp': ['kh', 'handakuten']
+};
+
+function find_row(kana_char) {
+	for (var row in kana) {
+		if (kana[row].hasOwnProperty(kana_char)) {
+			return row;
+		}
+	}
+	return null;
+}
+
+function get_mnemonic(kana_char) {
+	var row = find_row(kana_char);
+	if (!row || !dakuten_map[row]) {
+		return null;
+	}
+
+	var base_row = dakuten_map[row][0];
+	var mark = dakuten_map[row][1];
+	var cur_keys = Object.keys(kana[row]);
+	var base_keys = Object.keys(kana[base_row]);
+	var idx = cur_keys.indexOf(kana_char);
+	if (idx == -1) {
+		return null;
+	}
+
+	var base_kana = base_keys[idx];
+	var base_reading = kana[base_row][base_kana];
+	var cur_reading_val = kana[row][kana_char];
+
+	if (mark == 'handakuten') {
+		return base_kana + ' (' + base_reading + ') + ゜ handakuten (small circle) → ' + kana_char + ' (' + cur_reading_val + '). The circle jumps straight to the P sound — it does not go through B.';
+	}
+	return base_kana + ' (' + base_reading + ') + ゛ dakuten (two strokes) → ' + kana_char + ' (' + cur_reading_val + '). The strokes voice the consonant.';
+}
+
 var active = [];
 var shuffled = [];
 var fonts = [];
@@ -449,12 +490,57 @@ function show_kana() {
 		document.getElementById('kana').innerHTML = '<img class="inverse" src="kana/fonts/' + font + '/' + cur_kana + '.png" />';
 	}
 	document.getElementById('answer').innerHTML = cur_reading;
-	
+
 	if(show_tools.indexOf(cur_kana) == -1) {
 		document.getElementById('tool_stroke').style.visibility = 'hidden';
 	} else {
 		document.getElementById('tool_stroke').style.visibility = 'visible';
 	}
+
+	var mnemonic_box = document.getElementById('mnemonicBox');
+	mnemonic_box.style.display = 'none';
+	mnemonic_box.innerHTML = '';
+	if(get_mnemonic(cur_kana)) {
+		document.getElementById('tool_mnemonic').style.visibility = 'visible';
+	} else {
+		document.getElementById('tool_mnemonic').style.visibility = 'hidden';
+	}
+
+	if(document.getElementById('autoplay_sound').checked) {
+		play_sound();
+	}
+}
+
+function toggle_mnemonic() {
+	var mnemonic_box = document.getElementById('mnemonicBox');
+	var text = get_mnemonic(cur_kana);
+	if(! text) {
+		return;
+	}
+	if(mnemonic_box.style.display == 'block') {
+		mnemonic_box.style.display = 'none';
+	} else {
+		mnemonic_box.innerHTML = text;
+		mnemonic_box.style.display = 'block';
+	}
+	document.getElementById('input_box').focus();
+}
+
+function grade_pass() {
+	total_answered += 1;
+	total_correct += 1;
+	update_level(cur_kana, true);
+	show_kana();
+}
+
+function grade_fail() {
+	total_answered += 1;
+	if(! mistake_recorded) {
+		record_mistake(cur_kana);
+		mistake_recorded = true;
+	}
+	update_level(cur_kana, false);
+	show_kana();
 }
 
 function check_answer() {
@@ -529,13 +615,19 @@ function hide_answer() {
 
 function play_sound() {
 	var audio = new Audio('kana/audio/' + cur_reading + '.mp3');
-	audio.play();
+	var result = audio.play();
+	if (result && result.catch) {
+		result.catch(function() {});
+	}
 	document.getElementById('input_box').focus();
 }
 
 function play_other(file) {
 	var audio = new Audio('kana/audio/' + file + '.mp3');
-	audio.play();
+	var result = audio.play();
+	if (result && result.catch) {
+		result.catch(function() {});
+	}
 }
 
 function stroke_order() {
@@ -560,9 +652,12 @@ onload = function () {
 
 	document.getElementById('tool_sound').onclick = play_sound;
 	document.getElementById('tool_stroke').onclick = stroke_order;
+	document.getElementById('tool_mnemonic').onclick = toggle_mnemonic;
 	document.getElementById('tool_stats').onclick = show_stats;
 	document.getElementById('statsClose').onclick = hide_stats;
 	document.getElementById('statsReset').onclick = reset_stats;
+	document.getElementById('btn_pass').onclick = grade_pass;
+	document.getElementById('btn_fail').onclick = grade_fail;
 
 	var kana_div = document.getElementById('kana');
 	kana_div.onmouseover = show_answer;
@@ -579,6 +674,16 @@ onload = function () {
 			if(e.keyCode == 27) {
 				hide_stats();
 			}
+			return;
+		}
+		if(e.key == '1') {
+			e.preventDefault();
+			grade_fail();
+			return;
+		}
+		if(e.key == '3') {
+			e.preventDefault();
+			grade_pass();
 			return;
 		}
 		document.getElementById('input_box').focus();

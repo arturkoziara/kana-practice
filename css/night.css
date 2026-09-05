@@ -793,6 +793,70 @@ color:rgb(37, 37, 37);
 cursor:pointer;
 }
 
+.mnemonic-box {
+display:none;
+max-width:26em;
+margin:0 auto 1.2em;
+padding:0.7em 1em;
+background-color:rgb(245, 245, 245);
+box-shadow:1px 2px 2px 1px rgba(0,0,0,0.12), 1px 2px 2px 1px rgba(0,0,0,0.24);
+color:rgb(37, 37, 37);
+font-size:85%;
+font-style:italic;
+text-align:center;
+}
+
+.grade-buttons {
+display:flex;
+justify-content:center;
+gap:1em;
+margin:0.8em 0 1em;
+}
+
+.grade-btn {
+font-family:inherit;
+font-size:90%;
+font-weight:700;
+color:rgb(37, 37, 37);
+background-color:rgb(245, 245, 245);
+border:none;
+box-shadow:1px 2px 2px 1px rgba(0,0,0,0.12), 1px 2px 2px 1px rgba(0,0,0,0.24);
+padding:0.5em 1.2em;
+cursor:pointer;
+}
+
+.grade-fail {
+border-bottom:2px solid rgb(190, 60, 60);
+}
+
+.grade-pass {
+border-bottom:2px solid rgb(60, 140, 90);
+}
+
+.key-hint {
+display:inline-block;
+margin-left:0.4em;
+padding:0 0.4em;
+font-size:85%;
+color:rgb(120, 120, 120);
+background-color:#fff;
+}
+
+.autoplay-toggle {
+display:block;
+text-align:center;
+font-size:78%;
+color:rgb(120, 120, 120);
+margin-top:0.8em;
+cursor:pointer;
+}
+
+.autoplay-toggle input[type="checkbox"] {
+display:inline-block;
+vertical-align:middle;
+margin-right:0.4em;
+}
+
 .kanacheck {
 display:inline;
 }
