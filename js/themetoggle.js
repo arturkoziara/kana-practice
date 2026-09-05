@@ -1,26 +1,30 @@
+(function() {
+	var saved = localStorage.getItem('kana_theme');
+	if (saved == 'dark' || saved == 'light') {
+		document.documentElement.setAttribute('data-theme', saved);
+	}
+})();
+
 function initThemeToggle() {
 	var toggle = document.getElementById('theme-switch');
 	if (!toggle) {
 		return;
 	}
 
-	function syncFromStylesheet() {
-		var active = typeof getActiveStyleSheet === 'function' ? getActiveStyleSheet() : null;
-		toggle.checked = (active == 'alternate');
+	function is_dark() {
+		var explicit = document.documentElement.getAttribute('data-theme');
+		if (explicit) {
+			return explicit == 'dark';
+		}
+		return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 	}
 
-	syncFromStylesheet();
+	toggle.checked = is_dark();
 
 	toggle.onchange = function() {
-		var title = toggle.checked ? 'alternate' : 'default';
-		setActiveStyleSheet(title);
-		if (typeof createCookie === 'function') {
-			createCookie('style', title, 365);
-		}
-		// Toggling `disabled` on an already-rendered alternate stylesheet
-		// does not reliably restyle the live page in every browser, so
-		// reload with the cookie already set for a clean re-render.
-		location.reload();
+		var theme = toggle.checked ? 'dark' : 'light';
+		document.documentElement.setAttribute('data-theme', theme);
+		localStorage.setItem('kana_theme', theme);
 	};
 }
 
