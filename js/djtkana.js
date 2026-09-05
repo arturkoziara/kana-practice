@@ -323,6 +323,7 @@ var fonts = [];
 
 var cur_kana;
 var cur_reading;
+var wrong = false;
 
 var total_answered = 0;
 var total_correct = 0;
@@ -451,7 +452,7 @@ function render_streak_panel() {
 	}
 
 	var grid_html = '';
-	for (i = 0; i < cells.length; i++) {
+	for (var i = 0; i < cells.length; i++) {
 		var c = cells[i];
 		var level = 0;
 		if (c.count > 0) {
@@ -561,9 +562,9 @@ function get_weight(k) {
 
 function build_queue(items) {
 	var pool = [];
-	for (i = 0; i < items.length; i++) {
+	for (var i = 0; i < items.length; i++) {
 		var w = get_weight(items[i][0]);
-		for (x = 0; x < w; x++) {
+		for (var x = 0; x < w; x++) {
 			pool.push(items[i]);
 		}
 	}
@@ -593,7 +594,7 @@ function render_stats() {
 
 	var html = '<p class="stats-hint">Kana you struggle with show up more often; mastered kana show up less.</p>';
 	html += '<table class="stats-table"><tr><th>Kana</th><th>Mistakes</th><th>Seen</th><th>Accuracy</th><th>Level</th></tr>';
-	for (i = 0; i < keys.length; i++) {
+	for (var i = 0; i < keys.length; i++) {
 		var k = keys[i];
 		var s = stats[k];
 		var acc = Math.round((1 - s.wrong / s.seen) * 100);
@@ -636,7 +637,7 @@ function render_live_stats() {
 	var counts = [0, 0, 0, 0, 0, 0];
 	var total_wrong = 0;
 	var total_seen = 0;
-	for (i = 0; i < keys.length; i++) {
+	for (var i = 0; i < keys.length; i++) {
 		var s = stats[keys[i]];
 		counts[s.level || 0] += 1;
 		total_wrong += s.wrong;
@@ -653,8 +654,8 @@ function render_live_stats() {
 	}).slice(0, 6);
 
 	var weak_html = '';
-	for (i = 0; i < weakest.length; i++) {
-		var k = weakest[i];
+	for (var wi = 0; wi < weakest.length; wi++) {
+		var k = weakest[wi];
 		weak_html += '<span class="live-stats-kana' + (stats[k].wrong > 0 ? ' is-weak' : '') + '" title="' + stats[k].wrong + ' mistake(s), ' + stats[k].seen + ' seen">' + k + '</span>';
 	}
 	if (weak_html == '') {
@@ -671,20 +672,20 @@ function render_live_stats() {
 }
 
 function save_settings() {
-	inputs = document.getElementsByTagName('input');
-	for (i = 0; i < inputs.length; i++) {
+	var inputs = document.getElementsByTagName('input');
+	for (var i = 0; i < inputs.length; i++) {
 		if (inputs[i].type == 'checkbox') {
-			checked = inputs[i].checked ? '1' : '0';
+			var checked = inputs[i].checked ? '1' : '0';
 			localStorage.setItem('kana_' + inputs[i].id, checked);
 		}
 	}
-	
+
 	collect();
 }
 
 function load_settings() {
-	inputs = document.getElementsByTagName('input');
-	for (i = 0; i < inputs.length; i++) {
+	var inputs = document.getElementsByTagName('input');
+	for (var i = 0; i < inputs.length; i++) {
 		if (inputs[i].type == 'checkbox') {
 			var setting = localStorage.getItem('kana_' + inputs[i].id);
 			if(setting === '1') {
@@ -700,9 +701,9 @@ function load_settings() {
 
 function check(set) {
 	var trs = document.getElementsByClassName(set);
-	for (i = 0; i < trs.length; i++) {
+	for (var i = 0; i < trs.length; i++) {
 		var tds = trs[i].children;
-		for (x = 0; x < tds.length; x++) {
+		for (var x = 0; x < tds.length; x++) {
 			if(tds[x].children[0].id != 'KOI-WIN') {
 				tds[x].children[0].checked = true;
 			}
@@ -713,9 +714,9 @@ function check(set) {
 
 function uncheck(set) {
 	var trs = document.getElementsByClassName(set);
-	for (i = 0; i < trs.length; i++) {
+	for (var i = 0; i < trs.length; i++) {
 		var tds = trs[i].children;
-		for (x = 0; x < tds.length; x++) {
+		for (var x = 0; x < tds.length; x++) {
 			tds[x].children[0].checked = false;
 		}
 	}
@@ -740,23 +741,23 @@ function shuffle(orig_array) {
 }
 
 function collect() {
-	kanacheck = document.getElementsByClassName('kanacheck');
+	var kanacheck = document.getElementsByClassName('kanacheck');
 	active = [];
 	shuffled = [];
-	for (i = 0; i < kanacheck.length; i++) {
-		cur = kanacheck[i];
+	for (var i = 0; i < kanacheck.length; i++) {
+		var cur = kanacheck[i];
 		if(cur.checked == true) {
-			for (p in kana[cur.id]) {
+			for (var p in kana[cur.id]) {
 				active.push( [p, kana[cur.id][p]] );
 			}
 		}
 	}
-	
+
 	fonts = [];
-	fontcheck = document.getElementsByClassName('fontcheck');
-	for (i = 0; i < fontcheck.length; i++) {
-		if(fontcheck[i].checked == true) {
-			fonts.push(fontcheck[i].id);
+	var fontcheck = document.getElementsByClassName('fontcheck');
+	for (var f = 0; f < fontcheck.length; f++) {
+		if(fontcheck[f].checked == true) {
+			fonts.push(fontcheck[f].id);
 		}
 	}
 }
@@ -872,22 +873,23 @@ function grade_fail() {
 }
 
 function check_answer() {
-	answer = document.getElementById('input_box').value.toLowerCase();
+	var answer = document.getElementById('input_box').value.toLowerCase();
 	if(! answer) {
 		answer = 'x';
 	}
-	
-	chars = answer.split('');
-	
-	possible = [cur_reading];
+
+	var chars = answer.split('');
+
+	var possible = [cur_reading];
 	if(cur_reading in replacements) {
 		possible = possible.concat(replacements[cur_reading]);
 	}
 
-	for (i = 0; i < chars.length; i++) {
-		var err = true;
-		
-		for (x = 0; x < possible.length; x++) {
+	var err;
+	for (var i = 0; i < chars.length; i++) {
+		err = true;
+
+		for (var x = 0; x < possible.length; x++) {
 			if(chars[i] == possible[x].charAt(i)) {
 				err = false;
 			}
@@ -974,15 +976,15 @@ function stroke_order() {
 }
 
 
-onload = function () {
+function init() {
 	load_settings();
 	load_stats();
 	load_delay();
 	load_daily();
 	render_streak_panel();
 
-	inputs = document.getElementsByTagName('input');
-	for (i = 0; i < inputs.length; i++) {
+	var inputs = document.getElementsByTagName('input');
+	for (var i = 0; i < inputs.length; i++) {
 		if (inputs[i].type == 'checkbox') {
 			inputs[i].onclick = save_settings;
 			inputs[i].onpropertychange = inputs[i].oninput;
@@ -1039,4 +1041,10 @@ onload = function () {
 			}
 		}
 	}
+}
+
+if (document.readyState == 'loading') {
+	document.addEventListener('DOMContentLoaded', init);
+} else {
+	init();
 }
