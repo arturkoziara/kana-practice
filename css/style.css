@@ -507,16 +507,21 @@ ul#tools li a {
 	margin: 0.6em 0 0;
 }
 
+.stats-table-wrap {
+	overflow-x: auto;
+	margin-top: 0.6em;
+}
+
 .stats-table {
 	width: 100%;
 	border-collapse: collapse;
-	margin-top: 0.6em;
 	font-size: 0.85em;
 }
 
 .stats-table th, .stats-table td {
 	padding: 0.3em 0.5em;
 	text-align: center;
+	white-space: nowrap;
 	border-bottom: 1px solid var(--border);
 }
 
