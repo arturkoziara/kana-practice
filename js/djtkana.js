@@ -534,49 +534,23 @@ function record_mistake(k) {
 var level_weights = [10, 6, 4, 2, 1, 1];
 var level_labels = ['new', 'learning', 'learning', 'practicing', 'practicing', 'mastered'];
 var max_level = level_weights.length - 1;
-var graduation_start_days = 1;
-var graduation_max_days = 60;
-var day_ms = 86400000;
 
 function update_level(k, correct) {
 	if (!stats[k]) {
-		stats[k] = { seen: 0, wrong: 0, level: 0, due: null, interval_days: 0 };
+		stats[k] = { seen: 0, wrong: 0, level: 0 };
 	}
 	if (typeof stats[k].level != 'number') {
 		stats[k].level = 0;
 	}
-	if (typeof stats[k].interval_days != 'number') {
-		stats[k].interval_days = 0;
-	}
-	if (typeof stats[k].due == 'undefined') {
-		stats[k].due = null;
-	}
-
 	if (correct) {
 		stats[k].level = Math.min(stats[k].level + 1, max_level);
 	} else {
 		stats[k].level = Math.max(stats[k].level - 2, 0);
 	}
-
-	if (stats[k].level == max_level && correct) {
-		stats[k].interval_days = stats[k].due ? Math.min(stats[k].interval_days * 2, graduation_max_days) : graduation_start_days;
-		stats[k].due = Date.now() + stats[k].interval_days * day_ms;
-	} else if (stats[k].level < max_level) {
-		stats[k].due = null;
-		stats[k].interval_days = 0;
-	}
-
 	save_stats();
 }
 
-function is_resting(k) {
-	return !!(stats[k] && stats[k].due && stats[k].due > Date.now());
-}
-
 function get_weight(k) {
-	if (is_resting(k)) {
-		return 0;
-	}
 	var level = (stats[k] && typeof stats[k].level == 'number') ? stats[k].level : 0;
 	if (level < 0) {
 		level = 0;
@@ -587,31 +561,16 @@ function get_weight(k) {
 	return level_weights[level];
 }
 
-function format_due(s) {
-	if (!s.due) {
-		return '—';
-	}
-	var diff_ms = s.due - Date.now();
-	if (diff_ms <= 0) {
-		return 'due now';
-	}
-	var days = Math.ceil(diff_ms / day_ms);
-	return 'in ' + days + 'd';
-}
-
 function build_queue(items) {
+	// Every checked kana gets at least level_weights[max] (>= 1) copies in
+	// the pool, so a full pass through it always includes everything you've
+	// checked - mastered kana just show up far less often, never absent.
 	var pool = [];
 	for (var i = 0; i < items.length; i++) {
 		var w = get_weight(items[i][0]);
 		for (var x = 0; x < w; x++) {
 			pool.push(items[i]);
 		}
-	}
-	if (pool.length == 0) {
-		// Everything checked is resting (mastered, not due yet). Rather than
-		// show a stuck blank screen, review early instead of skipping the
-		// session entirely.
-		return shuffle(items);
 	}
 	return shuffle(pool);
 }
@@ -637,14 +596,14 @@ function render_stats() {
 		return stats[b].seen - stats[a].seen;
 	});
 
-	var html = '<p class="stats-hint">Kana you struggle with show up more often. Once mastered, a kana rests and won\'t come back until its scheduled review is due.</p>';
-	html += '<div class="stats-table-wrap"><table class="stats-table"><tr><th>Kana</th><th>Mistakes</th><th>Seen</th><th>Accuracy</th><th>Level</th><th>Next review</th></tr>';
+	var html = '<p class="stats-hint">Kana you struggle with show up more often; mastered kana show up less, but never disappear entirely.</p>';
+	html += '<div class="stats-table-wrap"><table class="stats-table"><tr><th>Kana</th><th>Mistakes</th><th>Seen</th><th>Accuracy</th><th>Level</th></tr>';
 	for (var i = 0; i < keys.length; i++) {
 		var k = keys[i];
 		var s = stats[k];
 		var acc = Math.round((1 - s.wrong / s.seen) * 100);
 		var level = s.level || 0;
-		html += '<tr' + (s.wrong > 0 ? ' class="stats-row-miss"' : '') + '><td class="stats-kana">' + k + '</td><td>' + s.wrong + '</td><td>' + s.seen + '</td><td>' + acc + '%</td><td>' + level_labels[level] + '</td><td>' + format_due(s) + '</td></tr>';
+		html += '<tr' + (s.wrong > 0 ? ' class="stats-row-miss"' : '') + '><td class="stats-kana">' + k + '</td><td>' + s.wrong + '</td><td>' + s.seen + '</td><td>' + acc + '%</td><td>' + level_labels[level] + '</td></tr>';
 	}
 	html += '</table></div>';
 	body.innerHTML = html;
@@ -709,11 +668,10 @@ function render_live_stats() {
 
 	var accuracy = total_seen > 0 ? Math.round((1 - total_wrong / total_seen) * 100) : 100;
 	var mastered = counts[level_weights.length - 1];
-	var resting = keys.filter(is_resting).length;
 
 	el.innerHTML =
 		'<div class="live-stats-row"><span class="live-stats-label">Weakest</span><span class="live-stats-kanas">' + weak_html + '</span></div>' +
-		'<div class="live-stats-row"><span class="live-stats-label">Mastered</span><span>' + mastered + ' / ' + keys.length + (resting > 0 ? ' (' + resting + ' resting)' : '') + '</span></div>' +
+		'<div class="live-stats-row"><span class="live-stats-label">Mastered</span><span>' + mastered + ' / ' + keys.length + '</span></div>' +
 		'<div class="live-stats-row"><span class="live-stats-label">Accuracy</span><span>' + accuracy + '%</span></div>';
 }
 
