@@ -944,6 +944,50 @@ color:rgb(110, 110, 110);
 margin:0.6em 0 0;
 }
 
+.live-stats {
+margin-top:1.4em;
+padding-top:1em;
+border-top:1px solid rgba(37, 37, 37, 0.15);
+font-size:78%;
+}
+
+.live-stats-row {
+display:flex;
+align-items:baseline;
+justify-content:center;
+gap:0.6em;
+margin-top:0.4em;
+}
+
+.live-stats-row:first-child {
+margin-top:0;
+}
+
+.live-stats-label {
+color:rgb(120, 120, 120);
+min-width:5.5em;
+text-align:right;
+}
+
+.live-stats-kanas {
+display:inline-flex;
+gap:0.4em;
+flex-wrap:wrap;
+}
+
+.live-stats-kana {
+font-size:1.3em;
+color:rgb(37, 37, 37);
+}
+
+.live-stats-kana.is-weak {
+color:rgb(200, 0, 0);
+}
+
+.live-stats-empty {
+color:rgb(120, 120, 120);
+}
+
 .stats-table {
 width:100%;
 border-collapse:collapse;

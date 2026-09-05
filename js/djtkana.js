@@ -261,6 +261,57 @@ function reset_stats() {
 	stats = {};
 	save_stats();
 	render_stats();
+	render_live_stats();
+}
+
+function render_live_stats() {
+	var el = document.getElementById('liveStats');
+	if (!el) {
+		return;
+	}
+
+	var keys = Object.keys(stats).filter(function(k) { return stats[k].seen > 0; });
+
+	if (keys.length == 0) {
+		el.innerHTML = '<span class="live-stats-empty">No data yet &mdash; answer a few to see your weak spots here.</span>';
+		return;
+	}
+
+	var counts = [0, 0, 0, 0, 0, 0];
+	var total_wrong = 0;
+	var total_seen = 0;
+	for (i = 0; i < keys.length; i++) {
+		var s = stats[keys[i]];
+		counts[s.level || 0] += 1;
+		total_wrong += s.wrong;
+		total_seen += s.seen;
+	}
+
+	var weakest = keys.slice().sort(function(a, b) {
+		var la = stats[a].level || 0;
+		var lb = stats[b].level || 0;
+		if (la != lb) {
+			return la - lb;
+		}
+		return stats[b].wrong - stats[a].wrong;
+	}).slice(0, 6);
+
+	var weak_html = '';
+	for (i = 0; i < weakest.length; i++) {
+		var k = weakest[i];
+		weak_html += '<span class="live-stats-kana' + (stats[k].wrong > 0 ? ' is-weak' : '') + '" title="' + stats[k].wrong + ' mistake(s), ' + stats[k].seen + ' seen">' + k + '</span>';
+	}
+	if (weak_html == '') {
+		weak_html = '<span class="live-stats-empty">Nothing shaky yet &mdash; nice.</span>';
+	}
+
+	var accuracy = total_seen > 0 ? Math.round((1 - total_wrong / total_seen) * 100) : 100;
+	var mastered = counts[level_weights.length - 1];
+
+	el.innerHTML =
+		'<div class="live-stats-row"><span class="live-stats-label">Weakest</span><span class="live-stats-kanas">' + weak_html + '</span></div>' +
+		'<div class="live-stats-row"><span class="live-stats-label">Mastered</span><span>' + mastered + ' / ' + keys.length + '</span></div>' +
+		'<div class="live-stats-row"><span class="live-stats-label">Accuracy</span><span>' + accuracy + '%</span></div>';
 }
 
 function save_settings() {
@@ -388,6 +439,7 @@ function show_kana() {
 
 	mistake_recorded = false;
 	record_seen(cur_kana);
+	render_live_stats();
 
 	var font = fonts[Math.floor(Math.random()*fonts.length)];
 	
