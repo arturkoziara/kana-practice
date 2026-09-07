@@ -262,31 +262,59 @@ var mnemonics = {
 	'ヲ': 'Looks like a fancy fishhook with a flourish, rarely used — still just "OH".',
 	'ン': 'Looks like a single comma-shaped hook — the final sound, just "N".',
 
-	'ガ': 'Looks like a sickle blade throwing off sparks as it swings — "GAH"!',
-	'ギ': 'Looks like a key jammed in a rusty lock, straining — "GEE", stuck.',
-	'グ': 'Looks like a claw gripping something heavy — "GOO", heave!',
-	'ゲ': 'Looks like a flag whipping violently in a storm — "GEH", windy.',
-	'ゴ': 'Looks like an open box buzzing with bees inside — "GO", run!',
-	'ザ': 'Looks like a ZAppy lightning bolt hitting a wall.',
-	'ジ': 'Looks like a sideways face laughing so hard that JImmy’s tears are flying out.',
-	'ズ': 'Looks like an acrobat ZUooming down a zip line.',
-	'ゼ': 'Looks like a ZEn garden gate with a couple of stepping stones.',
-	'ゾ': 'Looks like the zig-zag patterns on a ZOo animal, like a zebra.',
-	'ダ': 'Looks like a bird’s talon slamming down onto prey — "DAH", pounce!',
-	'ヂ': 'Looks like a fishing pole buzzing on the line — a rare twin of ジ, still "JI".',
-	'ヅ': 'Looks like waves crashing with a low rumble — a rare twin of ズ, still "ZU".',
-	'デ': 'Looks like a TV antenna picking up static — "DEH", bad signal.',
-	'ド': 'Looks like a signpost struck by lightning — "DOH"!',
-	'バ': 'Looks like two legs stomping down hard — "BAH", thump.',
-	'ビ': 'Looks like a fishhook buzzing with a caught bee — "BEE".',
-	'ブ': 'Looks like a shark fin crashing through a wave — "BOO", splash.',
-	'ベ': 'Looks like a mountain peak rumbling right before it booms — "BEH".',
-	'ボ': 'Looks like a lighthouse beam booming out a warning — "BOH".',
-	'パ': 'Looks like two legs kicking a balloon until it pops — "PA", pop!',
-	'ピ': 'Looks like a fishhook popping a little bubble — "PEE"-wee.',
-	'プ': 'Looks like a shark fin popping out of a bubble bath — "POO"-f.',
-	'ペ': 'Looks like a tiny peak popping like a cork — "PEH"-pper.',
-	'ポ': 'Looks like a lighthouse beam popping like a flashbulb — "POH"-p goes the light.'
+	'ガ': 'A gargoyle flapping its wings, leaving two speed lines (゛) in the air — GAH.',
+	'ギ': 'A guitar with a broken string, shooting two sparks (゛) as it snaps — GEE.',
+	'グ': 'A startled goose dropping two feathers (゛) as it flaps away — GOO.',
+	'ゲ': 'Someone kicking a gerbil — the two dashes (゛) are the leg\'s swinging motion lines — GEH.',
+	'ゴ': 'A go-kart with twin exhaust pipes spitting two flames (゛) — GO!',
+	'ザ': 'Zap! A samurai sword slicing down, throwing off two sparks (゛) — ZAH.',
+	'ジ': 'Jeep tracks curving away, kicking up two chunks of mud (゛) — JI.',
+	'ズ': 'A zoo animal sweating two drops (゛) in the heat — ZOO.',
+	'ゼ': 'A zebra glancing back at two flies (゛) buzzing near it — ZEH.',
+	'ゾ': 'A zombie with two arrows (゛) sticking out of its head — ZOH.',
+	'ダ': 'A dartboard hit by two darts (゛) — DAH.',
+	'ヂ': 'A cheerleader dropping her two pom-poms (゛) — JI (rare; twin of ジ).',
+	'ヅ': 'Three zoo animals sweating (゛) — ZU (rare; twin of ズ).',
+	'デ': 'A devil\'s pitchfork with two sparks (゛) at the tip — DEH.',
+	'ド': 'A tall door with two heavy iron knockers (゛) — DOH.',
+	'バ': 'A basketball (゛) bouncing off the backboard — BAH.',
+	'ビ': 'A bee with two stingers (゛) aiming right at you — BEE.',
+	'ブ': 'A heavy boot kicking two rocks (゛) out of the way — BOO.',
+	'ベ': 'A flat bed with two pillows (゛) sitting on top — BEH.',
+	'ボ': 'A boy on a pogo stick juggling two balls (゛) — BOH.',
+	'パ': 'Two slices of pastrami with a single meatball (゜) floating beside them — PA.',
+	'ピ': 'A pig with a large circular ring (゜) through its nose — PEE.',
+	'プ': 'A pull-tab on a soda can — the (゜) is the round hole you drink from — POO.',
+	'ペ': 'A penguin sliding on its belly, chasing a snowball (゜) — PEH.',
+	'ポ': 'A police officer flashing a round circular badge (゜) — POH.'
+};
+
+var mnemonic_samples = {
+	'ガ': { word: 'ガラス', reading: 'Garasu', gloss: 'Glass' },
+	'ギ': { word: 'ギター', reading: 'Gitaa', gloss: 'Guitar' },
+	'グ': { word: 'グラス', reading: 'Gurasu', gloss: 'Tumbler / Glass' },
+	'ゲ': { word: 'ゲーム', reading: 'Ge-e-mu', gloss: 'Game' },
+	'ゴ': { word: 'ゴルフ', reading: 'Gorufu', gloss: 'Golf' },
+	'ザ': { word: 'ピザ', reading: 'Pi-za', gloss: 'Pizza' },
+	'ジ': { word: 'ジュース', reading: 'Ju-u-su', gloss: 'Juice' },
+	'ズ': { word: 'ズボン', reading: 'Zu-bo-n', gloss: 'Trousers' },
+	'ゼ': { word: 'ゼリー', reading: 'Ze-ri-i', gloss: 'Jelly' },
+	'ゾ': { word: 'ゾンビ', reading: 'Zo-n-bi', gloss: 'Zombie' },
+	'ダ': { word: 'ダンス', reading: 'Da-n-su', gloss: 'Dance' },
+	'ヂ': { word: 'ハナヂ', reading: 'Ha-na-ji', gloss: 'Nosebleed' },
+	'ヅ': { word: 'ヅラ', reading: 'Zu-ra', gloss: 'Wig (slang)' },
+	'デ': { word: 'デート', reading: 'De-e-to', gloss: 'Date' },
+	'ド': { word: 'ドア', reading: 'Do-a', gloss: 'Door' },
+	'バ': { word: 'バス', reading: 'Ba-su', gloss: 'Bus' },
+	'ビ': { word: 'ビール', reading: 'Bi-i-ru', gloss: 'Beer' },
+	'ブ': { word: 'ブロック', reading: 'Bu-ro-k-ku', gloss: 'Block' },
+	'ベ': { word: 'ベッド', reading: 'Be-d-do', gloss: 'Bed' },
+	'ボ': { word: 'ボタン', reading: 'Bo-ta-n', gloss: 'Button' },
+	'パ': { word: 'パン', reading: 'Pa-n', gloss: 'Bread' },
+	'ピ': { word: 'ピンク', reading: 'Pi-n-ku', gloss: 'Pink' },
+	'プ': { word: 'プール', reading: 'Pu-u-ru', gloss: 'Pool' },
+	'ペ': { word: 'ペン', reading: 'Pe-n', gloss: 'Pen' },
+	'ポ': { word: 'ポスト', reading: 'Po-su-to', gloss: 'Postbox' }
 };
 
 var combo_base_map = {
@@ -296,9 +324,18 @@ var combo_base_map = {
 	'kdr': 'kr', 'kdg': 'kg', 'kdj': 'kz', 'kdj2': 'kd', 'kdb': 'kb', 'kdp': 'kp'
 };
 
+function render_sample_html(kana_char) {
+	var sample = mnemonic_samples[kana_char];
+	if (!sample) {
+		return '';
+	}
+	var highlighted = sample.word.replace(kana_char, '<span class="mnemonic-highlight">' + kana_char + '</span>');
+	return '<div class="mnemonic-sample">' + highlighted + ' <span class="mnemonic-sample-gloss">(' + sample.reading + ' — ' + sample.gloss + ')</span></div>';
+}
+
 function get_mnemonic(kana_char) {
 	if (mnemonics[kana_char]) {
-		return mnemonics[kana_char];
+		return mnemonics[kana_char] + render_sample_html(kana_char);
 	}
 
 	var row = find_row(kana_char);
@@ -314,7 +351,7 @@ function get_mnemonic(kana_char) {
 	var cur_reading_val = kana[row][kana_char];
 
 	return base_kana + ' (' + base_reading + ') + small ' + small[idx] + ' → ' + kana_char + ' (' + cur_reading_val + '). ' +
-		(mnemonics[base_kana] || '') + ' Just glide it into "' + cur_reading_val + '".';
+		(mnemonics[base_kana] || '') + ' Just glide it into "' + cur_reading_val + '".' + render_sample_html(kana_char);
 }
 
 var active = [];
@@ -597,13 +634,13 @@ function render_stats() {
 	});
 
 	var html = '<p class="stats-hint">Kana you struggle with show up more often; mastered kana show up less, but never disappear entirely.</p>';
-	html += '<div class="stats-table-wrap"><table class="stats-table"><tr><th>Kana</th><th>Mistakes</th><th>Seen</th><th>Accuracy</th><th>Level</th></tr>';
+	html += '<div class="stats-table-wrap"><table class="stats-table"><tr><th>Kana</th><th>Mistakes</th><th>Seen</th><th>Accuracy</th><th>Level</th><th></th></tr>';
 	for (var i = 0; i < keys.length; i++) {
 		var k = keys[i];
 		var s = stats[k];
 		var acc = Math.round((1 - s.wrong / s.seen) * 100);
 		var level = s.level || 0;
-		html += '<tr' + (s.wrong > 0 ? ' class="stats-row-miss"' : '') + '><td class="stats-kana">' + k + '</td><td>' + s.wrong + '</td><td>' + s.seen + '</td><td>' + acc + '%</td><td>' + level_labels[level] + '</td></tr>';
+		html += '<tr' + (s.wrong > 0 ? ' class="stats-row-miss"' : '') + '><td class="stats-kana">' + k + '</td><td>' + s.wrong + '</td><td>' + s.seen + '</td><td>' + acc + '%</td><td>' + level_labels[level] + '</td><td><a class="stats-row-remove" onclick="remove_stat(\'' + k + '\')" title="Remove this kana\'s stats">&times;</a></td></tr>';
 	}
 	html += '</table></div>';
 	body.innerHTML = html;
@@ -616,6 +653,13 @@ function show_stats() {
 
 function hide_stats() {
 	document.getElementById('statsOverlay').style.display = 'none';
+}
+
+function remove_stat(k) {
+	delete stats[k];
+	save_stats();
+	render_stats();
+	render_live_stats();
 }
 
 function reset_stats() {

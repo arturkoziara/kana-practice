@@ -320,6 +320,24 @@ ul#tools li a {
 	text-align: center;
 }
 
+.mnemonic-sample {
+	margin-top: 0.6em;
+	font-style: normal;
+	font-size: 1.1em;
+}
+
+.mnemonic-highlight {
+	color: #ff8c00;
+	font-weight: 700;
+}
+
+.mnemonic-sample-gloss {
+	display: block;
+	margin-top: 0.2em;
+	color: var(--text-muted);
+	font-size: 0.75em;
+}
+
 /* Toggles under the tools row */
 
 .autoplay-toggle {
@@ -530,6 +548,17 @@ ul#tools li a {
 }
 
 .stats-row-miss td {
+	color: var(--wrong);
+}
+
+.stats-row-remove {
+	cursor: pointer;
+	color: var(--text-faint);
+	font-weight: 700;
+	padding: 0 0.3em;
+}
+
+.stats-row-remove:hover {
 	color: var(--wrong);
 }
 
